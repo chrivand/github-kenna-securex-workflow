@@ -1,0 +1,792 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_01WPREWLK9OR936eVrB2bOuG9FnSmLryTMz",
+    "name": "GitHub Trigger CVE Look Up",
+    "title": "GitHub Trigger CVE Look Up",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.secure_string",
+        "properties": {
+          "value": "*****",
+          "scope": "local",
+          "name": "Kenna API Key",
+          "type": "datatype.secure_string",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01WPTTT6FCWT172d3V7MiQc4gVfRfnpmhla",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.secure_string",
+        "properties": {
+          "value": "*****",
+          "scope": "local",
+          "name": "Webex Access Token",
+          "type": "datatype.secure_string",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01WS8AVR0XXER1QTDqt3HrlfIFYv3c3ndDo",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "local",
+          "name": "GitHub Payload",
+          "type": "datatype.string",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01WPRFT1HWRE26vggb0eKHZgqLq8IC1YpmP",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "CVE-2022-0609",
+          "scope": "input",
+          "name": "CVE Input for Testing",
+          "type": "datatype.string",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01WPY4I52ANAM5VEQ0cUdwudcIGKDM7tXtk",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "Y2lzY29zcGFyazovL3VzL1JPT00vYzE3NjE4MzAtMDdkNi0xMWViLWE5ZTctYjcxMTViN2U4ZDc0",
+          "scope": "local",
+          "name": "Webex Room ID",
+          "type": "datatype.string",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01WS8F0R6VUUX3aIYDj2eCKyqgOa4qO2JUz",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "is_atomic": false
+      },
+      "delete_workflow_instance": false,
+      "display_name": "GitHub Trigger CVE Look Up",
+      "runtime_user": {
+        "target_default": true
+      },
+      "target": {
+        "no_target": true
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_01WPT2BUD2M6Z0anCeVp9ofVh6IxJEF9Xxu",
+        "name": "JSONPath Query",
+        "title": "Parse Webhook Payload",
+        "type": "corejava.jsonpathquery",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": true,
+          "display_name": "Parse Webhook Payload",
+          "input_json": "$trigger.triggerevent_01WPRF5VQS6PV2sgt1CTecJ0VKa4sqdY61O.output.request_body$",
+          "jsonpath_queries": [
+            {
+              "jsonpath_query": "$.alert.external_identifier",
+              "jsonpath_query_name": "CVE-ID",
+              "jsonpath_query_type": "string"
+            },
+            {
+              "jsonpath_query": "$.alert.external_reference",
+              "jsonpath_query_name": "CVE Link",
+              "jsonpath_query_type": "string"
+            },
+            {
+              "jsonpath_query": "$.alert.severity",
+              "jsonpath_query_name": "CVE Severity",
+              "jsonpath_query_type": "string"
+            },
+            {
+              "jsonpath_query": "$.repository.name",
+              "jsonpath_query_name": "Repo Name",
+              "jsonpath_query_type": "string"
+            },
+            {
+              "jsonpath_query": "$.repository.html_url",
+              "jsonpath_query_name": "Repo Link",
+              "jsonpath_query_type": "string"
+            }
+          ],
+          "skip_execution": false
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01WS8G9L1Q19C59cLTSY3JKjyDJnzoYOTrG",
+        "name": "Condition Block",
+        "title": "parsing succesful?",
+        "type": "logic.if_else",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "parsing succesful?",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "blocks": [
+          {
+            "unique_name": "definition_activity_01WS8G9LJ2GO90OmrFw97QWBz60BqRcBorD",
+            "name": "Condition Branch",
+            "title": "no",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$activity.definition_activity_01WPT2BUD2M6Z0anCeVp9ofVh6IxJEF9Xxu.output.succeeded$",
+                "operator": "eq",
+                "right_operand": false
+              },
+              "continue_on_failure": false,
+              "display_name": "no",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01WS8GEVMIUCU38lmgmMbWfFnLXVWrukQK7",
+                "name": "Completed",
+                "title": "Completed",
+                "type": "logic.completed",
+                "base_type": "activity",
+                "properties": {
+                  "completion_type": "failed-completed",
+                  "continue_on_failure": false,
+                  "display_name": "Completed",
+                  "result_message": "Parsing failed",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "unique_name": "definition_activity_01WPRN517ID3H6soJohvshGZHLCxoY2s2RD",
+        "name": "Group",
+        "title": "Kenna - VI+ Show Malware Hashes",
+        "type": "logic.group",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Kenna - VI+ Show Malware Hashes",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "actions": [
+          {
+            "unique_name": "definition_activity_01WPRN9RAA9AU78Wa3mizjmPlgKvb28y49C",
+            "name": "HTTP Request",
+            "title": "Kenna - VI+ Show Malware Hashes",
+            "type": "web-service.http_request",
+            "base_type": "activity",
+            "properties": {
+              "accept": "application/json",
+              "action_timeout": 180,
+              "allow_auto_redirect": true,
+              "content_type": "application/json",
+              "continue_on_error_status_code": false,
+              "continue_on_failure": false,
+              "custom_headers": [
+                {
+                  "name": "X-Risk-Token",
+                  "value": "$workflow.definition_workflow_01WPREWLK9OR936eVrB2bOuG9FnSmLryTMz.local.variable_workflow_01WPTTT6FCWT172d3V7MiQc4gVfRfnpmhla$"
+                }
+              ],
+              "display_name": "Kenna - VI+ Show Malware Hashes",
+              "method": "GET",
+              "relative_url": "vulnerability_definitions/$workflow.definition_workflow_01WPREWLK9OR936eVrB2bOuG9FnSmLryTMz.input.variable_workflow_01WPY4I52ANAM5VEQ0cUdwudcIGKDM7tXtk$/malware",
+              "runtime_user": {
+                "target_default": true
+              },
+              "skip_execution": false,
+              "target": {
+                "override_workflow_target": true,
+                "target_id": "definition_target_01WPRQYAQ94916xX2H172y1btLngZRPLicW"
+              }
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_01WPRNFHDJOPM5uLtbo056htNKwzszf6UMF",
+            "name": "Condition Block",
+            "title": "Error Checking",
+            "type": "logic.if_else",
+            "base_type": "activity",
+            "properties": {
+              "continue_on_failure": false,
+              "display_name": "Error Checking",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "blocks": [
+              {
+                "unique_name": "definition_activity_01WPRNFI0I70K1bfqDheWTDnMRCM7eyBgxB",
+                "name": "Condition Branch",
+                "title": "STATUS NOT 200",
+                "type": "logic.condition_block",
+                "base_type": "activity",
+                "properties": {
+                  "condition": {
+                    "left_operand": "$activity.definition_activity_01WPRN9RAA9AU78Wa3mizjmPlgKvb28y49C.output.status_code$",
+                    "operator": "ne",
+                    "right_operand": 200
+                  },
+                  "continue_on_failure": false,
+                  "display_name": "STATUS NOT 200",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity",
+                "actions": [
+                  {
+                    "unique_name": "definition_activity_01WPRON5TIP080ByS1WkQPkBqyIWfI90YTX",
+                    "name": "Completed",
+                    "title": "Failed",
+                    "type": "logic.completed",
+                    "base_type": "activity",
+                    "properties": {
+                      "completion_type": "failed-completed",
+                      "continue_on_failure": false,
+                      "display_name": "Failed",
+                      "result_message": "API Call failed: $activity.definition_activity_01WPRN9RAA9AU78Wa3mizjmPlgKvb28y49C.output.status_code$",
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity"
+                  }
+                ]
+              },
+              {
+                "unique_name": "definition_activity_01WPXUHIZ5S1Z02i38Qxftt1LrORgbF8DEI",
+                "name": "Condition Branch",
+                "title": "status 404 - CVE not found",
+                "type": "logic.condition_block",
+                "base_type": "activity",
+                "properties": {
+                  "condition": {
+                    "left_operand": "$activity.definition_activity_01WPRN9RAA9AU78Wa3mizjmPlgKvb28y49C.output.status_code$",
+                    "operator": "eq",
+                    "right_operand": 404
+                  },
+                  "continue_on_failure": false,
+                  "display_name": "status 404 - CVE not found",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity",
+                "actions": [
+                  {
+                    "unique_name": "definition_activity_01WPXWIWG75210EyP5o9NZAXKMaZjrjpLrV",
+                    "name": "Completed",
+                    "title": "Completed",
+                    "type": "logic.completed",
+                    "base_type": "activity",
+                    "properties": {
+                      "completion_type": "succeeded",
+                      "continue_on_failure": false,
+                      "display_name": "Completed",
+                      "result_message": "CVE not found, status code 404",
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "unique_name": "definition_activity_01WPY32SB6CNM34ScXNwUjZVDnKPsdgD1mI",
+        "name": "Read Table from JSON",
+        "title": "Read sha256's to table from JSON",
+        "type": "corejava.read_table_from_json",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": false,
+          "display_name": "Read sha256's to table from JSON",
+          "input_json": "$activity.definition_activity_01WPRN9RAA9AU78Wa3mizjmPlgKvb28y49C.output.response_body$",
+          "jsonpath_query": "$.malware",
+          "persist_output": false,
+          "populate_columns": false,
+          "skip_execution": false,
+          "table_columns": [
+            {
+              "column_name": "sha256",
+              "column_type": "string"
+            }
+          ]
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01WPRX9AAKRX33gHtAJBXMYUllwg1fpzBRz",
+        "name": "Threat Response - Generate Access Token",
+        "title": "Threat Response - Generate Access Token",
+        "type": "workflow.atomic_workflow",
+        "base_type": "subworkflow",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Threat Response - Generate Access Token",
+          "runtime_user": {
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "override_workflow_target": true,
+            "target_id": "definition_target_01FX4PX03MTVA6RoNZQSYR044dgdPbeS3ju",
+            "target_type": "web-service.endpoint"
+          },
+          "workflow_id": "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH",
+          "workflow_name": "Threat Response - Generate Access Token"
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01WPY5G2ZNGC51XrBbn5GtONrGhWlXLkWwu",
+        "name": "For Each",
+        "title": "For Each Sha256",
+        "type": "logic.for_each",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "For Each Sha256",
+          "skip_execution": false,
+          "source_array": "$activity.definition_activity_01WPY32SB6CNM34ScXNwUjZVDnKPsdgD1mI.output.read_table_from_json$"
+        },
+        "object_type": "definition_activity",
+        "actions": [
+          {
+            "unique_name": "definition_activity_01WPRUAY0VJ8Q0PyMeS8kcJvGbeHYlt1G8y",
+            "name": "Group",
+            "title": "Automated Threat Hunt",
+            "type": "logic.group",
+            "base_type": "activity",
+            "properties": {
+              "continue_on_failure": false,
+              "display_name": "Automated Threat Hunt",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01WPRXGTLMRJ914RiyOlOVsCJ6WSyE24Cm2",
+                "name": "Threat Response - Enrich Observable",
+                "title": "Threat Response - Enrich Observable",
+                "type": "workflow.atomic_workflow",
+                "base_type": "subworkflow",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "Threat Response - Enrich Observable",
+                  "input": {
+                    "variable_workflow_01PP78TYDTQ2L5AWh7XpLPkXldkBYssq6SC": "$activity.definition_activity_01WPY5G2ZNGC51XrBbn5GtONrGhWlXLkWwu.input.source_array[@].sha256$",
+                    "variable_workflow_01PP78TYDTTUQ6Qtv47uK5sgOFSbJ4b4Cno": "sha256",
+                    "variable_workflow_01PP78TYDTV5R5JK6DtYaS5E95bWbZBstS5": "$activity.definition_activity_01WPRX9AAKRX33gHtAJBXMYUllwg1fpzBRz.output.variable_workflow_01PP75S3G7CJY6WAQr2IJC7qga2SIoE09gQ$"
+                  },
+                  "runtime_user": {
+                    "target_default": true
+                  },
+                  "skip_execution": false,
+                  "target": {
+                    "override_workflow_target": true,
+                    "target_id": "definition_target_01M04DKNCSGR76els6onV3zvMbdokmYZsiG",
+                    "target_type": "web-service.endpoint"
+                  },
+                  "workflow_id": "definition_workflow_01PP78TYLE76D6188QkWvzWydNU6L8PtlvS",
+                  "workflow_name": "Threat Response - Enrich Observable"
+                },
+                "object_type": "definition_activity"
+              },
+              {
+                "unique_name": "definition_activity_01WPYGBY09SID7gJsfRKEvMjhPrYP7AKLjK",
+                "name": "Execute Python Script",
+                "title": "Check for sightings with targets",
+                "type": "python3.script",
+                "base_type": "activity",
+                "properties": {
+                  "action_timeout": 180,
+                  "continue_on_failure": false,
+                  "display_name": "Check for sightings with targets",
+                  "script": "import sys,json\nenrichment_data = json.loads(sys.argv[1])\nsightings_dict = {\"sightings\":[]}\n\nfor module in enrichment_data['data']:\n    if \"sightings\" in module['data'].keys() and len(module['data']['sightings']) > 0:\n        for sighting in module['data']['sightings']['docs']:\n            if \"targets\" in sighting.keys() and len(sighting[\"targets\"]) > 0:\n                for target in sighting[\"targets\"]:\n                    temp_dict = {\n                        \"target_value\": target[\"observables\"][0][\"value\"],\n                        \"target_type\": target[\"observables\"][0][\"type\"],\n                        \"observed_time\": target[\"observed_time\"][\"start_time\"],\n                        \"sighting_json\": sighting\n                    }\n                    sightings_dict[\"sightings\"].append(temp_dict)\n\n# dump all target sightings\nsighting_json = json.dumps(sightings_dict)",
+                  "script_arguments": [
+                    "$activity.definition_activity_01WPRXGTLMRJ914RiyOlOVsCJ6WSyE24Cm2.output.variable_workflow_01PP78TYDTWG01QGHDq5uwDKdvEqS9CdcYg$"
+                  ],
+                  "script_queries": [
+                    {
+                      "script_query": "sighting_json",
+                      "script_query_name": "sighting_json",
+                      "script_query_type": "string"
+                    }
+                  ],
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity"
+              },
+              {
+                "unique_name": "definition_activity_01WS82Y7NPWFK7SBMx7e9a2MF8eaGaMrRD8",
+                "name": "Read Table from JSON",
+                "title": "Read sightings from JSON",
+                "type": "corejava.read_table_from_json",
+                "base_type": "activity",
+                "properties": {
+                  "action_timeout": 180,
+                  "continue_on_failure": true,
+                  "display_name": "Read sightings from JSON",
+                  "input_json": "$activity.definition_activity_01WPYGBY09SID7gJsfRKEvMjhPrYP7AKLjK.output.script_queries.sighting_json$",
+                  "jsonpath_query": "$.sightings[*]",
+                  "persist_output": false,
+                  "populate_columns": false,
+                  "skip_execution": false,
+                  "table_columns": [
+                    {
+                      "column_name": "sighting_json",
+                      "column_type": "string"
+                    },
+                    {
+                      "column_name": "target_value",
+                      "column_type": "string"
+                    },
+                    {
+                      "column_name": "target_type",
+                      "column_type": "string"
+                    },
+                    {
+                      "column_name": "observed_time",
+                      "column_type": "string"
+                    }
+                  ]
+                },
+                "object_type": "definition_activity"
+              },
+              {
+                "unique_name": "definition_activity_01WS89GEHFD2S7lLcdlG7KbL5WbAOEGQVuw",
+                "name": "Condition Block",
+                "title": "do we have target sightings?",
+                "type": "logic.if_else",
+                "base_type": "activity",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "do we have target sightings?",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity",
+                "blocks": [
+                  {
+                    "unique_name": "definition_activity_01WS89GEXLTZQ7m0g4Iqz6FxH22UZw2CROL",
+                    "name": "Condition Branch",
+                    "title": "no targets",
+                    "type": "logic.condition_block",
+                    "base_type": "activity",
+                    "properties": {
+                      "condition": {
+                        "left_operand": "$activity.definition_activity_01WS82Y7NPWFK7SBMx7e9a2MF8eaGaMrRD8.output.succeeded$",
+                        "operator": "eq",
+                        "right_operand": false
+                      },
+                      "continue_on_failure": false,
+                      "display_name": "no targets",
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity",
+                    "actions": [
+                      {
+                        "unique_name": "definition_activity_01WS8A2WT21753eWSnt4f84isD2aRRRIhM9",
+                        "name": "Continue",
+                        "title": "skip sha256",
+                        "type": "logic.continue",
+                        "base_type": "activity",
+                        "properties": {
+                          "continue_on_failure": false,
+                          "display_name": "skip sha256",
+                          "skip_execution": false
+                        },
+                        "object_type": "definition_activity"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "unique_name": "definition_activity_01WS9P6VNBICV4enaCDfZPZiKGhqqLiX809",
+                "name": "For Each",
+                "title": "For Each target sighting",
+                "type": "logic.for_each",
+                "base_type": "activity",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "For Each target sighting",
+                  "skip_execution": false,
+                  "source_array": "$activity.definition_activity_01WS82Y7NPWFK7SBMx7e9a2MF8eaGaMrRD8.output.read_table_from_json$"
+                },
+                "object_type": "definition_activity",
+                "actions": [
+                  {
+                    "unique_name": "definition_activity_01WSY0WG885U05j66fs6zbzwCYyXPKTMNVx",
+                    "name": "Service Now - Create Incident",
+                    "title": "Service Now - Create Incident",
+                    "type": "workflow.atomic_workflow",
+                    "base_type": "subworkflow",
+                    "properties": {
+                      "continue_on_failure": false,
+                      "display_name": "Service Now - Create Incident",
+                      "input": {
+                        "variable_workflow_01C0CK2MY2SLG1FXph6ZHp7iHmRw1KvUFlN": "Vulnerability $activity.definition_activity_01WPT2BUD2M6Z0anCeVp9ofVh6IxJEF9Xxu.output.jsonpath_queries.CVE-ID$ detected in repository $activity.definition_activity_01WPT2BUD2M6Z0anCeVp9ofVh6IxJEF9Xxu.output.jsonpath_queries.Repo Name$",
+                        "variable_workflow_01FGYF0DUR8HV2TMpEKctsYjQR4mzjD5OTu": "Associated malware with $activity.definition_activity_01WPT2BUD2M6Z0anCeVp9ofVh6IxJEF9Xxu.output.jsonpath_queries.CVE-ID$, has a sighting of a target. File hash associated malware: $activity.definition_activity_01WPY5G2ZNGC51XrBbn5GtONrGhWlXLkWwu.input.source_array[@].sha256$. Link to CVE: $activity.definition_activity_01WPT2BUD2M6Z0anCeVp9ofVh6IxJEF9Xxu.output.jsonpath_queries.CVE Link$. Link to repo: $activity.definition_activity_01WPT2BUD2M6Z0anCeVp9ofVh6IxJEF9Xxu.output.jsonpath_queries.Repo Name$, where CVE was detected: $activity.definition_activity_01WPT2BUD2M6Z0anCeVp9ofVh6IxJEF9Xxu.output.jsonpath_queries.Repo Link$. Target of sighting: $activity.definition_activity_01WS9P6VNBICV4enaCDfZPZiKGhqqLiX809.input.source_array[@].target_value$ (type: $activity.definition_activity_01WS9P6VNBICV4enaCDfZPZiKGhqqLiX809.input.source_array[@].target_type$. Time of sighting: $activity.definition_activity_01WS9P6VNBICV4enaCDfZPZiKGhqqLiX809.input.source_array[@].observed_time$. Investigate here: https://visibility.amp.cisco.com/investigate?q=$activity.definition_activity_01WPY5G2ZNGC51XrBbn5GtONrGhWlXLkWwu.input.source_array[@].sha256$",
+                        "variable_workflow_01FGYGCZL5M2E1m1O5tvVVn0DVzVTLwytei": 1,
+                        "variable_workflow_01FGYGPFJYM4L5aVpzNOhRwMmzKJDofqufe": 1,
+                        "variable_workflow_01FGYGZ0OYYNM5pWjyyreMjNHDjusjNe8jx": "",
+                        "variable_workflow_01FGYI8HES41K63G3UzMinBH3iApm37fBGt": "admin",
+                        "variable_workflow_01FMQD0HIJIDU5kce0VNx4HQiMYjMfUvBlj": "v2"
+                      },
+                      "runtime_user": {
+                        "target_default": true
+                      },
+                      "skip_execution": false,
+                      "target": {
+                        "override_workflow_target": true,
+                        "target_id": "definition_target_01WSY6QDP97HA6h0nRWNfR9kFfGSN0fpEDp",
+                        "target_type": "web-service.endpoint"
+                      },
+                      "workflow_id": "definition_workflow_01C0BYD0GI1KZ0mxScCSxVrfX70zrUdqLlW",
+                      "workflow_name": "Service Now - Create Incident"
+                    },
+                    "object_type": "definition_activity"
+                  },
+                  {
+                    "unique_name": "definition_activity_01WPYG3SV1BWR7H0BDbKMLExfOyWfCjDCFG",
+                    "name": "Webex Teams - Post Message to Room",
+                    "title": "Webex Teams - Post Message to Room",
+                    "type": "workflow.atomic_workflow",
+                    "base_type": "subworkflow",
+                    "properties": {
+                      "continue_on_failure": false,
+                      "display_name": "Webex Teams - Post Message to Room",
+                      "input": {
+                        "variable_workflow_01PP78DJH1TI76BYfsu9g0Tqj2S6cUxjtu5": "$workflow.definition_workflow_01WPREWLK9OR936eVrB2bOuG9FnSmLryTMz.local.variable_workflow_01WS8F0R6VUUX3aIYDj2eCKyqgOa4qO2JUz$",
+                        "variable_workflow_01PP78DJH1XNQ7gNQ5iZdperRHqrppzARXC": "$workflow.definition_workflow_01WPREWLK9OR936eVrB2bOuG9FnSmLryTMz.local.variable_workflow_01WS8AVR0XXER1QTDqt3HrlfIFYv3c3ndDo$",
+                        "variable_workflow_01PP78DJH1YWL3allalGQbg1VkgKwh9GvCi": "## 🚨 Associated malware with `$activity.definition_activity_01WPT2BUD2M6Z0anCeVp9ofVh6IxJEF9Xxu.output.jsonpath_queries.CVE-ID$`, has a target sighting  🚨\\n\\n* **File hash associated with malware:** `$activity.definition_activity_01WPY5G2ZNGC51XrBbn5GtONrGhWlXLkWwu.input.source_array[@].sha256$`\\n* **Link to CVE:** $activity.definition_activity_01WPT2BUD2M6Z0anCeVp9ofVh6IxJEF9Xxu.output.jsonpath_queries.CVE Link$\\n* **Link to repo (`$activity.definition_activity_01WPT2BUD2M6Z0anCeVp9ofVh6IxJEF9Xxu.output.jsonpath_queries.Repo Name$`), where CVE was detected:** $activity.definition_activity_01WPT2BUD2M6Z0anCeVp9ofVh6IxJEF9Xxu.output.jsonpath_queries.Repo Link$\\n* **Target of sighting:** `$activity.definition_activity_01WS9P6VNBICV4enaCDfZPZiKGhqqLiX809.input.source_array[@].target_value$` (type: `$activity.definition_activity_01WS9P6VNBICV4enaCDfZPZiKGhqqLiX809.input.source_array[@].target_type$`)\\n* **Time of sighting:** `$activity.definition_activity_01WS9P6VNBICV4enaCDfZPZiKGhqqLiX809.input.source_array[@].observed_time$`\\n* **Investigate here with SecureX Threat Response:** https://visibility.amp.cisco.com/investigate?q=$activity.definition_activity_01WPY5G2ZNGC51XrBbn5GtONrGhWlXLkWwu.input.source_array[@].sha256$",
+                        "variable_workflow_01PP78DJH22BB3Ej3I8tJ4OCQur0unYGjj9": "",
+                        "variable_workflow_01SVERQNMKN8N6vqX2djMtAfshphGydGsH8": ""
+                      },
+                      "runtime_user": {
+                        "target_default": true
+                      },
+                      "skip_execution": false,
+                      "target": {
+                        "override_workflow_target": true,
+                        "target_id": "definition_target_01GRC3KACN0EQ3FKm380fx9ufbyfPdrEJR5",
+                        "target_type": "web-service.endpoint"
+                      },
+                      "workflow_id": "definition_workflow_01PP78DJMXS415nTjonujf03ROkr6t2PNyw",
+                      "workflow_name": "Webex - Post Message to Room"
+                    },
+                    "object_type": "definition_activity"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "categories": [
+      "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
+    ]
+  },
+  "triggers": {
+    "triggerevent_01WPRF5VQS6PV2sgt1CTecJ0VKa4sqdY61O": {
+      "workflow_id": "definition_workflow_01WPREWLK9OR936eVrB2bOuG9FnSmLryTMz",
+      "name": "GitHub Webhook",
+      "title": "",
+      "lowercase_name": "event.github_webhook",
+      "type": "event",
+      "base_type": "trigger",
+      "ref_id": "event_webhook_01WPREU1WP1Y236Mlv44tRL297Mk8Rl6BS8",
+      "version": "1.0.0",
+      "disabled": false,
+      "unique_name": "triggerevent_01WPRF5VQS6PV2sgt1CTecJ0VKa4sqdY61O",
+      "object_type": "triggerevent"
+    }
+  },
+  "events": {
+    "event_webhook_01WPREU1WP1Y236Mlv44tRL297Mk8Rl6BS8": {
+      "name": "GitHub Webhook Event",
+      "title": "GitHub Webhook Event",
+      "type": "webhook.event",
+      "base_type": "event",
+      "object_type": "event_webhook",
+      "target_id": "",
+      "webhook_id": "webhook_01WPRDJF57RNJ3g1o9CbVJb4q263je0Cgil",
+      "version": "1.0.0",
+      "properties": {
+        "title": "GitHub Webhook Event",
+        "webhook_id": "webhook_01WPRDJF57RNJ3g1o9CbVJb4q263je0Cgil"
+      },
+      "unique_name": "event_webhook_01WPREU1WP1Y236Mlv44tRL297Mk8Rl6BS8"
+    }
+  },
+  "targets": {
+    "definition_target_01FX4PX03MTVA6RoNZQSYR044dgdPbeS3ju": {
+      "unique_name": "definition_target_01FX4PX03MTVA6RoNZQSYR044dgdPbeS3ju",
+      "name": "CTR_For_Access_Token",
+      "title": "CTR Target for access token",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "default_runtime_user_id": "definition_runtime_user_01FX4PVG8KQBJ1tRR8iCfIYCzn4m063VRvD",
+        "description": "CTR_For_Access_Token",
+        "disable_certificate_validation": true,
+        "display_name": "CTR_For_Access_Token",
+        "host": "visibility.amp.cisco.com",
+        "no_runtime_user": false,
+        "path": "/iroh",
+        "protocol": "https"
+      }
+    },
+    "definition_target_01GRC3KACN0EQ3FKm380fx9ufbyfPdrEJR5": {
+      "unique_name": "definition_target_01GRC3KACN0EQ3FKm380fx9ufbyfPdrEJR5",
+      "name": "Webex Teams",
+      "title": "Webex Teams",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "description": "Webex Teams",
+        "disable_certificate_validation": false,
+        "display_name": "Webex Teams",
+        "host": "webexapis.com",
+        "no_runtime_user": true,
+        "port": 443,
+        "protocol": "https"
+      }
+    },
+    "definition_target_01M04DKNCSGR76els6onV3zvMbdokmYZsiG": {
+      "unique_name": "definition_target_01M04DKNCSGR76els6onV3zvMbdokmYZsiG",
+      "name": "CTR_API",
+      "title": "CTR API Target",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "description": "Target used to invoke iroh endpoints",
+        "disable_certificate_validation": false,
+        "display_name": "CTR_API",
+        "host": "visibility.amp.cisco.com",
+        "no_runtime_user": true,
+        "path": "/iroh",
+        "protocol": "https"
+      }
+    },
+    "definition_target_01WPRQYAQ94916xX2H172y1btLngZRPLicW": {
+      "unique_name": "definition_target_01WPRQYAQ94916xX2H172y1btLngZRPLicW",
+      "name": "Kenna API",
+      "title": "Kenna API",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "disable_certificate_validation": false,
+        "display_name": "Kenna API",
+        "host": "api.kennasecurity.com",
+        "ignore_proxy": false,
+        "no_runtime_user": true,
+        "protocol": "https"
+      }
+    },
+    "definition_target_01WSY6QDP97HA6h0nRWNfR9kFfGSN0fpEDp": {
+      "unique_name": "definition_target_01WSY6QDP97HA6h0nRWNfR9kFfGSN0fpEDp",
+      "name": "ServiceNow Dev Box",
+      "title": "ServiceNow Dev Box",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "default_runtime_user_id": "definition_runtime_user_01WSY634I98IK1QEQwW8LuXcJEnGh1fvs6P",
+        "disable_certificate_validation": false,
+        "display_name": "ServiceNow Dev Box",
+        "host": "dev107052.service-now.com",
+        "ignore_proxy": false,
+        "no_runtime_user": false,
+        "path": "/api",
+        "port": 443,
+        "protocol": "https"
+      }
+    }
+  },
+  "runtime_users": {
+    "definition_runtime_user_01FX4PVG8KQBJ1tRR8iCfIYCzn4m063VRvD": {
+      "unique_name": "definition_runtime_user_01FX4PVG8KQBJ1tRR8iCfIYCzn4m063VRvD",
+      "name": "CTR_Credentials",
+      "title": "CTR_Credentials",
+      "description": "Account Key for CTR",
+      "type": "runtime_user.web-service_basic_credentials",
+      "base_type": "runtime_user",
+      "object_type": "definition_runtime_user",
+      "properties": {
+        "auth_option": "Basic",
+        "basic_password": "*****",
+        "basic_username": "client-f260e781-9152-46e3-b8d2-8348a4e85932",
+        "display_name": "CTR_Credentials"
+      }
+    },
+    "definition_runtime_user_01WSY634I98IK1QEQwW8LuXcJEnGh1fvs6P": {
+      "unique_name": "definition_runtime_user_01WSY634I98IK1QEQwW8LuXcJEnGh1fvs6P",
+      "name": "ServiceNow Creds",
+      "title": "ServiceNow Creds",
+      "type": "runtime_user.web-service_basic_credentials",
+      "base_type": "runtime_user",
+      "object_type": "definition_runtime_user",
+      "properties": {
+        "auth_option": "Basic",
+        "basic_password": "*****",
+        "basic_username": "admin",
+        "display_name": "ServiceNow Creds"
+      }
+    }
+  },
+  "atomic_workflows": [
+    "definition_workflow_01C0BYD0GI1KZ0mxScCSxVrfX70zrUdqLlW",
+    "definition_workflow_01PP78DJMXS415nTjonujf03ROkr6t2PNyw",
+    "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH",
+    "definition_workflow_01PP78TYLE76D6188QkWvzWydNU6L8PtlvS"
+  ],
+  "webhooks": {
+    "webhook_01WPRDJF57RNJ3g1o9CbVJb4q263je0Cgil": {
+      "name": "GitHub Webook",
+      "title": "GitHub Webook",
+      "type": "generic.webhook",
+      "base_type": "webhook",
+      "object_type": "webhook",
+      "version": "1.0.0",
+      "properties": {
+        "display_name": "GitHub Webook",
+        "request_content_type": "application/json"
+      },
+      "unique_name": "webhook_01WPRDJF57RNJ3g1o9CbVJb4q263je0Cgil"
+    }
+  },
+  "dependent_workflows": [
+    "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH",
+    "definition_workflow_01PP78TYLE76D6188QkWvzWydNU6L8PtlvS",
+    "definition_workflow_01C0BYD0GI1KZ0mxScCSxVrfX70zrUdqLlW",
+    "definition_workflow_01PP78DJMXS415nTjonujf03ROkr6t2PNyw"
+  ]
+}

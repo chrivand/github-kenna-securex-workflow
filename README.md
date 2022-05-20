@@ -14,15 +14,15 @@ The triggered SecureX Orchestration workflow then checks all of the integrated S
 ## Required Targets
 - CTR_For_Access_Token (default)
 - CTR_API (default)
-- Webex Teams (see instructions)
-- Kenna Security VI+ (see instructions)
-- ServiceNow (see instructions)
+- Webex Teams
+- Kenna Security VI+
+- ServiceNow
 
 ## Required Account Keys
 - CTR_Credentials (default)
-- Webex Teams Token (see instructions)
-- Kenna Security VI+ (see instructions)
-- ServiceNow (see instructions)
+- Webex Teams Token (see **Import Workflow** instructions)
+- Kenna Security VI+ (see **Import Workflow** instructions)
+- ServiceNow (see **Import Workflow** instructions)
 
 ## Required Atomic Workflows
 - Threat Response - Generate Access Token (System Atomic, no import needed)

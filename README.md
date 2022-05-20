@@ -1,7 +1,7 @@
 ![License: CISCO](https://img.shields.io/badge/License-CISCO-blue.svg)
 [![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/chrivand/github-kenna-securex-workflow)
 
-# Workflow to Trigger an Automated Threat Hunt in SecureX from your CI/CD pipeline 
+# Workflow to Trigger an Automated Threat Hunt in SecureX from your CI/CD pipeline using a GitHub Webhook 
 
 This workflow can be triggered via a Vulnerability Alert Webhook from GitHub. It will then check whether the found vulnerability was actually exploited in your environment using the Cisco Kenna VI+ and Cisco SecureX APIs. This could happen when a new CVE is discovered and your production code is using that specific library. Obviously, you want to patch the application as soon as possible, but it could be that someone was already exploiting this vulnerability before the disclosure. This is a so-called “zero-day exploit”. 
 
